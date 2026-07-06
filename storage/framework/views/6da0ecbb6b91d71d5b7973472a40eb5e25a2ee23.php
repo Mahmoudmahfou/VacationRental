@@ -1,0 +1,47 @@
+<?php $__env->startSection('content'); ?>
+    <div class="hero-wrap js-fullheight" style="background-image: url('<?php echo e(asset('assets/images/room-1.jpg')); ?>');"
+        data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-start"
+                data-scrollax-parent="true">
+                <div class="col-md-7 ftco-animate">
+                    <h2 class="subheading">Pay With Paypal</h2>
+                    <h1 class="mb-4"></h1>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <!-- Replace "test" with your own sandbox Business account app client ID -->
+        <script
+            src="https://www.paypal.com/sdk/js?client-id=AbJ8mcNQPjRZazBDbj6dg0Xescx-tInWusOKGh9gnYOz8tWyr3KBnfqXISWkKw4-z7e9JpDHfQiSvchF&currency=USD">
+        </script>
+        <!-- Set up a container element for the button -->
+        <div id="paypal-button-container"></div>
+        <script>
+            paypal.Buttons({
+                // Sets up the transaction when a payment button is clicked
+                createOrder: (data, actions) => {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: '<?php echo e(Session::get('price')); ?>' // Can also reference a variable or function
+                            }
+                        }]
+                    });
+                },
+                // Finalize the transaction after payer approval
+                onApprove: (data, actions) => {
+                    return actions.order.capture().then(function(orderData) {
+
+                        window.location.href = 'http://127.0.0.1:8000/hotels/success';
+                    });
+                }
+            }).render('#paypal-button-container');
+        </script>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laravel\vaction-rental\resources\views/hotels/pay.blade.php ENDPATH**/ ?>
